@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather cast</title>
+</head>
+<style>
+    .frame {
+        width: 400px;
+        height: 500px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -250px;
+        margin-left: -200px;
+        background: linear-gradient(
+        rgb(24, 15, 66),
+        rgb(71, 61, 199)) ;
+        box-shadow: 0 0 10px 2px black;
+        overflow: hidden;
+    }
+    .thunder {
+        width: 400px;
+        height: 500px; 
+        animation-name: storm ;
+        animation-duration: 6s;
+        animation-delay: 4s;
+        animation-iteration-count: infinite;
+    } /*nav bar */
+    .nav {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 20%;
+        background: beige;
+        box-shadow: inset 0 0 5px 2px;
+        border-radius: 10px;
+        overflow: hidden;
+        z-index: 1000;
+    }
+    .bar {
+        width: 35%;
+        display: inline-block;
+        font-size: 20px;
+    }
+    .celsius {
+        left: 10px ;
+        position: absolute;
+        top: 22px;
+        height: 50px;
+        font-size: 45px;
+    }
+    .wind{
+        left: 25%;
+        position: absolute;
+        top: 25%;
+    }
+    .humidity {
+        left: 25%;
+        position: absolute;
+        bottom: 25%;
+    }
+    .wed {
+        right: 0%;
+        position: absolute;
+        top: 25%;
+    }
+    .thu { 
+        right: 0%;
+        position: absolute;
+        bottom: 25%;
+    }
+    /*moon and holes*/
+    .moon {
+        top: 15%;
+        left: 15%;
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: rgb(233, 223, 165);
+        box-shadow: 0 0 20px 5px rgba(238, 228, 169, 0.9);
+        animation: moon 2s ease-in forwards;
+        z-index: 50;
+    }
+    .hole {
+        background: rgb(194, 188, 153);
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        border-radius: 50%;
+    }
+    .hole1 {
+        top: 25%;
+        left: 15%;
+        height: 15px;
+        transform: skew(-15deg);
+    }
+    .hole2 {
+        top:50px;
+        left: 55px;
+        width: 20px;
+        height: 20px;
+    }
+    .hole3 {
+        top: 65px;
+        left: 20px;
+        transform: skew(15deg);
+    }
+    .hole4 {
+        top: 15px;
+        left: 75px;
+        transform: skewX(25deg);
+    }
+    .hole5 {
+        top: 20px;
+        left: 45px;
+        height: 20px;
+        width: 15px;
+        transform: skewX(2deg);
+    }
+    .hole6 {
+        top: 80px;
+        left: 55px;
+        transform: skewX(350deg);
+    }
+    .hole7 {
+        top: 40px;
+        left: 75px;
+        transform: skewX(350deg);
+        transform: scale(0.9);
+    }
+    .hole8 {
+        top: 50px;
+        left: 30px;
+        transform: skewX(350deg);
+        transform: scale(0.6);
+    }
+    .hole9 {
+        top: 5px;
+        left: 30px;
+        transform: skewX(350deg);
+        transform: scale(0.6);
+    }
+    .hole10 {
+        top: 70px;
+        left: 80px;
+        transform: skewX(350deg);
+        transform: scale(0.6);
+    }
+ /*static hills*/
+    .group {
+        position: absolute;
+        height: 300px;
+        width: 250px;
+        z-index: 100;
+    }
+    .hill1 {
+        height: 200px;
+        width: 2px;
+        bottom: 200px;
+        right: -55px;
+        border-left: 100px solid transparent;
+        border-right: 150px solid transparent;
+        border-bottom: 120px solid #d3d2d3;
+
+    }
+    .hill2 {
+        height: 240px;
+        width: 2px;
+        bottom: 180px;
+        right: 50px;
+        border-left: 120px solid transparent;
+        border-right: 100px solid transparent;
+        border-bottom: 120px solid #dbd9d9;
+    }
+    .hill3 {
+        bottom: 200px;
+        width: 0;
+        left: -50px;
+        border-left: 100px solid transparent;
+        border-right: 200px solid transparent;
+        border-bottom: 160px solid #cfcfcf;
+    }
+    .hill7 {
+        bottom: -50px;
+        right: -75px;
+        width: 350px;
+        border-radius: 50%;
+        background:darkgreen;
+    }
+    .hill6 {
+        bottom: -80px;
+        left: -55px;
+        border-radius: 50%;
+        width: 300px;
+        background: green;
+    }
+
+    .hill5 {
+        border-radius: 50%;
+        bottom: -60px;
+        left: -80px;
+        width: 200px;
+        background: darkgreen;
+    }
+    .hill4 {
+        border-radius: 50%;
+        bottom: -25px;
+        left: -50px;
+        width: 270px;
+        background: rgb(1, 70, 1);
+    }
+
+        /* rain */
+    .rain {             /* shape and color */
+        width: 10px;
+        height: 10px;
+        background: #499bbb;
+        border: 3px solid #499bbb;
+        border-radius: 0 50% 50% 50%;
+        transform: rotate(60deg);
+        z-index: 5000;
+
+    }
+    .rain1 {        
+        position: absolute;
+        right: -20px;
+        top: -20px;
+        animation: rainDrop 0.69s linear infinite;
+        transform:  translateY(100%,100%);
+        }
+    .rain2 {
+        position: absolute;
+        right: -10px;
+        top: -20px;
+        animation: rainDrop 1s linear infinite .8s;
+        transform:  translateY(100%,-100%);
+    }
+    .rain3 {
+        position: absolute;
+        right: 80px;
+        top: -20px;
+        animation: rainDrop 0.69s linear infinite 0.7s;
+        transform:  translateY(100%,-100%);
+    }
+    .rain4 {
+        position: absolute;
+        right: 120px;
+        top: -20px;
+        animation: rainDrop 1s linear infinite 1s;
+        transform:  translateY(100%,-100%);
+    }
+    .rain5 {
+        position: absolute;
+        right: 160px;
+        top: -20px;
+        animation: rainDrop 1s linear infinite 1.5s;
+        transform:  translateY(100%,-100%);
+    }
+    .rain6 {
+        position: absolute;
+        right: 180px;
+        top: -20px;
+        animation: rainDrop 0.69s linear infinite 1s;
+        transform:  translateY(100%,-100%);
+    }
+    .rain7 {
+        position: absolute;
+        right: 240px;
+        top: -20px;
+        animation: rainDrop 1s linear infinite 1.5s;
+        transform:  translateY(100%,-100%);
+    }
+    .rain8 {
+        position: absolute;
+        right: 280px;
+        top: -20px;
+        animation: rainDrop 0.69s linear infinite 0.8s;
+        transform:  translateY(100%,-100%);
+    }
+    .rain9 {
+        position: absolute;
+        right: 360px;
+        top: -20px;
+        animation: rainDrop 1s linear infinite 1s;
+        transform:  translateY(100%,-100%);
+    }
+    /* flying cloulds */
+    .flying1 {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: #42424e;
+        position: absolute;
+        top: 60px;
+        right: -120px;
+        animation-name: flying1;
+        animation-duration: 6.9s;
+        animation-delay: 3.5s;
+        animation-iteration-count: infinite;
+    }
+    .flying1r /*right*/ { 
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: #42424e;
+        position: absolute;
+        top: 15px;
+        right: 40px;
+    }
+    .flying1l /*left*/ {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: #42424e;
+        position: absolute;
+        top: 15px;
+        right: -10px;
+    }
+    .flying2 {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: var(--mid-cloud);
+        position: absolute;
+        top: 90px;
+        right: -220px;
+        animation-name: flying2;
+        animation-duration: 6.9s;
+        animation-delay: 4s;
+        animation-iteration-count: infinite;
+    }
+    .flying2r /*right*/{
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: var(--mid-cloud);
+        position: absolute;
+        top: 15px;
+        right: 40px;
+    }
+    .flying2l /*left*/ {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: var(--mid-cloud);
+        position: absolute;
+        top: 15px;
+        right: -20px;
+    }
+    .flying3 {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: #42424e;
+        position: absolute;
+        top: 20px;
+        right: -2000px;
+        animation-name: flying3;
+        animation-duration: 6.9s;
+        animation-delay: 4.2s;
+        animation-iteration-count: infinite;
+    }
+    .flying3r /*right*/{
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: #42424e;
+        position: absolute;
+        top: 15px;
+        right: 40px;
+    }
+    .flying3l /*left*/ {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: #42424e;
+        position: absolute;
+        top: 15px;
+        right: -20px;
+    }
+    /*animation timelapse*/
+@keyframes moon {
+    from {top: 400px;}
+    to {top: 40px}
+}
+@keyframes flying1 {
+    from {right: -200px;}
+    to { right: 700px;}
+}
+@keyframes flying2 {
+    from {right: -300px;}
+    to { right: 700px;}
+}
+@keyframes flying3 {
+    from {right: -600px;}
+    to { right: 700px;}
+}
+    @keyframes storm {
+        0% {background: linear-gradient(
+        rgb(24, 15, 66),
+        rgb(71, 61, 199));}
+        20% {background: linear-gradient(
+        rgb(24, 15, 66),
+        rgb(71, 61, 199));}
+        37% {background: linear-gradient(
+        rgb(24, 15, 66),
+        rgb(71, 61, 199));}
+        38% {background: linear-gradient(
+        rgb(197, 194, 209),
+        rgb(162, 161, 170));
+        }
+        40% {background: linear-gradient(
+        rgb(24, 15, 66),
+        rgb(71, 61, 199))}
+        60% {background: linear-gradient(
+        rgb(24, 15, 66),
+        rgb(71, 61, 199))}
+        84% {background: linear-gradient(
+        rgb(24, 15, 66),
+        rgb(71, 61, 199));}
+        84.01% {background: linear-gradient(
+        rgb(197, 194, 209),
+        rgb(162, 161, 170));
+        }
+        85% {background: linear-gradient(
+        rgb(24, 15, 66),
+        rgb(71, 61, 199));
+        }
+        92% {background: linear-gradient(
+        rgb(24, 15, 66),
+        rgb(71, 61, 199));}
+        93.01% {background: linear-gradient(
+        rgb(197, 194, 209),
+        rgb(162, 161, 170));
+        }
+        93% {background: linear-gradient(
+        rgb(24, 15, 66),
+        rgb(71, 61, 199));
+        }
+        94% {background: linear-gradient(
+        rgb(24, 15, 66),
+        rgb(71, 61, 199));}
+        95% {background: linear-gradient(
+        rgb(197, 194, 209),
+        rgb(162, 161, 170));
+        }
+        97% {background: linear-gradient(
+        rgb(24, 15, 66),
+        rgb(71, 61, 199));
+        }
+
+        100% {background: linear-gradient(
+        rgb(24, 15, 66),
+        rgb(71, 61, 199));
+        }
+    }
+
+    @keyframes rainDrop {
+        from{
+        transform: translate(0, -300px);
+    }
+    90%{
+        transform: translate(-100px, 380px);
+    }
+    to{
+        transform: translate(-100px, 420px) scale(2.5, 0.2);
+    }
+    }
+</style>
+<body>
+    <div class="frame">
+        <div class="thunder"></div>
+        <div class="nav">
+            <div class="bar">
+                <div class="bar celsius"><b>13°</b></div>
+                <div class="bar wind">Wind:E 69km/h</div>
+                <div class="bar humidity">Humidity:93%</div>
+                <div class="bar wed">WED:<b>21°/9°</b></div>
+                <div class="bar thu">THU:<b>24°/12°</b></div>
+            </div>
+        </div>
+        <div class="raindrop">
+            <div class="rain rain1"></div>
+            <div class="rain rain2"></div>
+            <div class="rain rain3"></div>
+            <div class="rain rain4"></div>
+            <div class="rain rain5"></div>
+            <div class="rain rain6"></div>
+            <div class="rain rain7"></div>
+            <div class="rain rain8"></div>
+            <div class="rain rain9"></div>
+        </div>
+        <div class="card">
+            <div class="cloud">
+                <div class="group hill1"></div>
+                <div class="group hill2"></div>
+                <div class="group hill3"></div>
+                <div class="group hill4"></div>
+                <div class="group hill5"></div>
+                <div class="group hill6"></div>
+                <div class="group hill7"></div>
+            </div>
+            <div class="moon">
+                <span class="hole hole1"></span>
+                <span class="hole hole2"></span>
+                <span class="hole hole3"></span>
+                <span class="hole hole4"></span>
+                <span class="hole hole5"></span>
+                <span class="hole hole6"></span>
+                <span class="hole hole7"></span>
+                <span class="hole hole8"></span>
+                <span class="hole hole9"></span>
+                <span class="hole hole10"></span>
+
+            </div>
+            <div class="flying">
+                <div class="flying1">
+                    <span class="flying1r"></span>
+                    <span class="flying1l"></span>
+                </div>
+                <div class="flying2">
+                    <span class="flying2r"></span>
+                    <span class="flying2r"></span>
+                </div>
+                <div class="flying3">
+                    <span class="flying3r"></span>
+                    <span class="flying3r"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
